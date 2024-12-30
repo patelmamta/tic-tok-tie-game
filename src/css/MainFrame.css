@@ -1,0 +1,36 @@
+.MainFrame {
+  width: 12%;
+  height: 12%;
+  display: block;
+}
+
+.Board {
+  margin: 20px;
+  width: 100%;
+  text-align: -webkit-center;
+}
+.winnerText {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  width: 100%;
+}
+.teamName {
+  font-weight: bolder;
+  font-size: 26px;
+  color: rgb(222, 89, 111);
+}
+.labelText {
+  font-weight: bold;
+  font-weight: 20px;
+}
+.restartButton {
+  padding: 10px;
+  font-weight: bold;
+  font-size: 12px;
+  color: white;
+  background-color: blueviolet;
+  border: 1px solid blueviolet;
+  border-radius: 4px;
+  margin: 20px;
+}
