@@ -4,8 +4,17 @@ import { ToastContainer, toast, Flip } from 'react-toastify';
 import "../css/MainFrame.css"
 
 function MainFrame() {
-  const initialValue =  new Array(9).fill(""); // create an array for 9 boxes
-  const [valueArray, setValueArray] = useState(initialValue); // set initial blank value
+
+  const setInitiateValue = (hash) => {
+    for(let i = 0; i < 9; i++) {
+      hash[i] = "";
+    }
+    return hash;
+  }// create an array for 9 boxes
+
+  const initialValue =  setInitiateValue({}); // set initial value
+  // const [valueArray, setValueArray] = useState(initialValue); // set initial blank value
+  const [valueArray, setValueArray] = useState(initialValue);
   const [team, setTeam] = useState("A"); // set Team
   const [value, setValue] = useState("X"); // set first element to play
   const [status, setStatus] = useState(false) // set statu to check winner or not
@@ -25,13 +34,16 @@ function MainFrame() {
       setTeam("A")
       setValue("X")
     }
-    setValueArray(prevArray =>
-      prevArray.map((num, i) => (
-        i === number ? value : num
-      ))
-    );
+    // setValueArray(prevArray =>
+    //   prevArray.map((num, i) => (
+    //     i === number ? value : num
+    //   ))
+    // );
+    setValueArray((prevArray) => ({
+      ...prevArray,
+      [number]: value
+    }));
   }
-
 
   const checkWinner = () => { // check winner
     const list =  [
@@ -48,23 +60,29 @@ function MainFrame() {
     for (let i = 0; i < list.length; i++) {
       const [a, b, c] = list[i];
       if((valueArray[a] === valueArray[b]) && (valueArray[a] === valueArray[c]) && (valueArray[a] !== "" && valueArray[a] !== "-")) {
-        setValueArray(prevArray =>
-          prevArray.map((num, i) => (
-            num === "" ? "-" : num
-          ))
-        );
+        // setValueArray(prevArray =>
+          //   prevArray.map((num, i) => (
+          //     i === "" ? "-" : num
+          //   ))
+        // );
+        const newValueArray =({...valueArray});
+        for(let i = 0; i < 9; i++) {
+          if (newValueArray[i] === "") {
+            newValueArray[i] = "-";
+          }
+        }
+        setValueArray({...newValueArray});
         setStatus(true)
         toast(
           <div className="winnerText">Winner Team  😍
-          <div className="teamName"> {(valueArray[a] === "X" ? "A" : "B") } </div></div>
+          <div className="teamName"> {(valueArr[a] === "X" ? "A" : "B") } </div></div>
         )
       } else {
-        if((valueArray[a] === "") || (valueArray[b] === "") || (valueArray[c] === "")) {
+        if((valueArr[a] === "") || (valueArr[b] === "") || (valueArr[c] === "")) {
           count += 1
         }
       }
     }
-    console.log(count, status)
     if( count === 0) {
       setStatus(true)
       toast("Game is over! please restart it on button click!")
