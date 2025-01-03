@@ -18,6 +18,8 @@ function MainFrame() {
   const [team, setTeam] = useState("A"); // set Team
   const [value, setValue] = useState("X"); // set first element to play
   const [status, setStatus] = useState(false) // set statu to check winner or not
+  const [gameStarted, setGameStarted] = useState(false) // Reveret the last steps
+  const [boxArray, setBoxArray] = useState([]) // set box array
   const LoopFrame = () => { //create 9 box using this loop
     return (
       [...Array(9)].map(( _, index) => (
@@ -43,6 +45,8 @@ function MainFrame() {
       ...prevArray,
       [number]: value
     }));
+    setBoxArray([...boxArray, number])
+    setGameStarted(true)
   }
 
   const checkWinner = () => { // check winner
@@ -75,17 +79,17 @@ function MainFrame() {
         setStatus(true)
         toast(
           <div className="winnerText">Winner Team  😍
-          <div className="teamName"> {(valueArr[a] === "X" ? "A" : "B") } </div></div>
+          <div className="teamName"> {(valueArray[a] === "X" ? "A" : "B") } </div></div>
         )
       } else {
-        if((valueArr[a] === "") || (valueArr[b] === "") || (valueArr[c] === "")) {
+        if((valueArray[a] === "") || (valueArray[b] === "") || (valueArray[c] === "")) {
           count += 1
         }
       }
     }
     if( count === 0) {
       setStatus(true)
-      toast("Game is over! please restart it on button click!")
+      toast("Game is over! please revert your last step if there is a doubt or restart the game on button click!")
     }
   }
 
@@ -94,6 +98,22 @@ function MainFrame() {
     setTeam("A");
     setValue("X");
     setStatus(false);
+  }
+
+  const revertLastStep = () => { // revert the last step
+    const lastStep = boxArray.pop();
+    setValueArray((prevArray) => ({
+      ...prevArray,
+      [lastStep]: ""
+    }));
+    setStatus(false)
+    if (value === "X") {
+      setValue("O")
+      setTeam("B")
+    } else {
+      setTeam("A")
+      setValue("X")
+    }
   }
 
   useEffect(() => { // call back to check the winner after changing the value state
@@ -113,6 +133,10 @@ function MainFrame() {
         )
         :
         <p>Team <b>{team}</b> Turn</p>
+      }
+      {
+        gameStarted && boxArray.length > 0 &&
+        <button className="revertButton" onClick={ () => revertLastStep()}>Revert</button>
       }
       <ToastContainer
         position="top-center"
